@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 from django_summernote.admin import SummernoteModelAdmin
-from scoreboard.models import Task, Team, Category, News
+from scoreboard.models import Task, Team, Category, News, SolvedTasks
 
 
 class NewsModelAdmin(SummernoteModelAdmin):
@@ -17,7 +17,19 @@ class NewsModelAdmin(SummernoteModelAdmin):
     )
     ordering = ('create_date',)
 
+
 admin.site.register(News, NewsModelAdmin)
+
+
+class SolvedTasksModelAdmin(ModelAdmin):
+    list_display = ('team', 'task', 'solved_at')
+    fieldsets = (
+        ("Solve", {'fields': ('team', 'task')}),
+    )
+    ordering = ('solved_at',)
+
+
+admin.site.register(SolvedTasks, SolvedTasksModelAdmin)
 
 
 class TaskModelAdmin(SummernoteModelAdmin):
@@ -25,7 +37,7 @@ class TaskModelAdmin(SummernoteModelAdmin):
     list_filter = ('category', 'score',)
     fieldsets = (
         (None, {'fields': ('name',)}),
-        ('Task info', {'fields': ('category', 'score',)}),
+        ('Task info', {'fields': ('category', 'score', 'flag', 'is_enabled')}),
         ('Task text', {'fields': ('text', 'task_file',)}),
     )
     search_fields = ('name',)

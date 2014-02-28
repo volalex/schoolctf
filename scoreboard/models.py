@@ -70,18 +70,18 @@ class Team(AbstractBaseUser):
         return self.team_name
 
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
+        """Does the user have a specific permission?"""
         # Simplest possible answer: Yes, always
         return True
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        """Does the user have permissions to view the app `app_label`?"""
         # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
+        """Is the user a member of staff?"""
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
@@ -117,9 +117,16 @@ class Task(models.Model):
     text = models.TextField(name='text', blank=False)
     task_file = models.FileField(verbose_name="Task file", upload_to="task_files", blank=True)
     flag = models.CharField(max_length=100, blank=False)
+    is_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+    def gen_file_link(self):
+        if self.task_file:
+            return "<a href='%s'>File</a>" % self.task_file.url
+        else:
+            return ""
 
 
 @receiver(models.signals.post_delete, sender=Task)
@@ -158,5 +165,8 @@ class SolvedTasks(models.Model):
     task = models.ForeignKey(Task)
     team = models.ForeignKey(Team)
     solved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('task', 'team'),)
 
 

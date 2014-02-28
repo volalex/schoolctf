@@ -12,22 +12,16 @@
             </tr>
         </thead>
         <tbody>
+        {% for team,score in results.items %}
             <tr>
                 <td>
-                    Тестовая команда
+                    {{ team.team_name }}
                 </td>
                 <td>
-                    100
+                    {{ score }}
                 </td>
             </tr>
-            <tr>
-                <td>
-                    Тестовая команда
-                </td>
-                <td>
-                    100
-                </td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
