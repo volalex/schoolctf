@@ -6,7 +6,11 @@ from django.contrib.admin.options import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
+from django.db import models
 from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.widgets import SummernoteWidget
 from scoreboard.models import Task, Team, Category, News, SolvedTasks
 
 
@@ -65,7 +69,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Team
-        fields = ('email', 'school', 'team_name')
+        fields = ('school', 'team_name')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -134,3 +138,11 @@ admin.site.register(Team, TeamUserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+
+
+class FlatPageCustomAdmin(FlatPageAdmin):
+    formfield_overrides = {models.TextField: {'widget': SummernoteWidget}}
+
+
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageCustomAdmin)

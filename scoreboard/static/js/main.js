@@ -58,7 +58,7 @@ $(document).ready(function (){
                 flag:flag
             },function (result){
                 if(result.result=="success"){
-                    toastr.success("Задание решено")
+                    toastr.success("Задание решено");
                     $("#flag_form").remove().fadeOut();
                     $("<div class='alert alert-success'>Задание решено</div>").appendTo("#main_content");
                 }
@@ -68,5 +68,10 @@ $(document).ready(function (){
             })
         }
 
-    })
+    });
+    //send message if any
+    var message = $("#message").text();
+    if($.trim(message)!=""){
+        toastr.error(message)
+    }
 });

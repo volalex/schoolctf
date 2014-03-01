@@ -1,12 +1,15 @@
 from collections import defaultdict
 import json
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.http.response import HttpResponseNotFound, HttpResponse
+from django.http.response import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
 
 
 #registration view
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -20,6 +23,32 @@ def index(request):
         return TemplateResponse(request, "index.html")
     else:
         return HttpResponseNotFound
+
+
+@csrf_protect
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect("scoreboard.views.index")
+            else:
+                messages.add_message(request, messages.ERROR, 'Неверное имя пользователя или пароль')
+                return redirect("scoreboard.views.index")
+
+        else:
+            messages.add_message(request, messages.ERROR, 'Неверное имя пользователя или пароль')
+            return redirect("scoreboard.views.index")
+    else:
+        return HttpResponseNotFound("Неверный запрос")
+
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect("/")
 
 
 @login_required
@@ -59,7 +88,7 @@ def task_solve(request, task_pk):
                 try:
                     solve.save()
                     response_data["result"] = "success"
-                    return HttpResponse(json.dumps(response_data),content_type="application/json")
+                    return HttpResponse(json.dumps(response_data), content_type="application/json")
                 except ValidationError:
                     response_data["result"] = "failed"
                     return HttpResponse(json.dumps(response_data), content_type="application/json")

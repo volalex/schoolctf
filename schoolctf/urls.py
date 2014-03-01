@@ -16,8 +16,8 @@ urlpatterns = patterns('',
                        url(r'^summernote/', include('django_summernote.urls')),
 
                        #login and registration urls
-                       url(r'accounts/registration', 'scoreboard.views.registration'),
-                       url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+                       url(r'^accounts/login/$', 'scoreboard.views.login_user'),
+                       url(r'^account/logout/$', 'scoreboard.views.logout_user'),
 
                        #news urls
                        url(r'news/(\d)/$', 'scoreboard.views.detail_news'),
