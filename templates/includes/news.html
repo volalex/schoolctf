@@ -12,7 +12,7 @@
             <a class="list-group-item" href="{% url 'scoreboard.views.detail_news' article.pk %}">
                 <h5>{{ article }}</h5>
                 <span class="label label-info">
-                    00:00
+                    {{ article.create_date | date:"D d M Y - H:i" }}
                 </span>
             </a>
         {% endif %}

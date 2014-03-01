@@ -114,4 +114,5 @@ com_crashlytics_export_strings.xml
 #specific files
 django-summernote/
 media/
+schoolctf/local_settings.py
 db.sqlite3
