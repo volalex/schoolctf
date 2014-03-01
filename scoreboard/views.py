@@ -43,7 +43,8 @@ def login_user(request):
             messages.add_message(request, messages.ERROR, 'Неверное имя пользователя или пароль')
             return redirect("scoreboard.views.index")
     else:
-        return HttpResponseNotFound("Неверный запрос")
+        messages.add_message(request, messages.ERROR, 'Пожалуйста войдите в систему')
+        return HttpResponseRedirect("scoreboard.views.index")
 
 
 def logout_user(request):
