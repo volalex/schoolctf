@@ -55,7 +55,7 @@ class Team(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     objects = TeamUserManager()
 
-    REQUIRED_FIELDS = ['school']
+    REQUIRED_FIELDS = ['school', 'email']
     USERNAME_FIELD = 'team_name'
 
     def get_full_name(self):
