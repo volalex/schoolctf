@@ -44,7 +44,7 @@ def login_user(request):
             return redirect("scoreboard.views.index")
     else:
         messages.add_message(request, messages.ERROR, 'Пожалуйста войдите в систему')
-        return HttpResponseRedirect("scoreboard.views.index")
+        return redirect("scoreboard.views.index")
 
 
 def logout_user(request):
