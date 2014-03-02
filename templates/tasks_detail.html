@@ -5,6 +5,7 @@
     <p>
     {% autoescape off %}
         {{ task.text }}
+        {{ task.gen_file_link }}
     {% endautoescape %}
     </p>
     {{ task.gen_file_link }}
