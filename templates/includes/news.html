@@ -5,7 +5,7 @@
             <a class="list-group-item active">
                 <h5>{{ article }}</h5>
                 <div class="label-info">
-                    00:00
+                    {{ article.create_date | date:"D d M Y - H:i" }}
                 </div>
             </a>
         {% else %}
