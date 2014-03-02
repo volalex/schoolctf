@@ -20,12 +20,12 @@ urlpatterns = patterns('',
                        url(r'^account/logout/$', 'scoreboard.views.logout_user'),
 
                        #news urls
-                       url(r'news/(\d)/$', 'scoreboard.views.detail_news'),
+                       url(r'news/(\d{1,4})/$', 'scoreboard.views.detail_news'),
 
                        #main urls
                        url(r'tasks/$', 'scoreboard.views.tasks'),
-                       url(r'tasks/(\d)/$', 'scoreboard.views.task_detail'),
-                       url(r'tasks/solve/(\d)/$', 'scoreboard.views.task_solve')
+                       url(r'tasks/(\d{1,4})/$', 'scoreboard.views.task_detail'),
+                       url(r'tasks/solve/(\d{1,4})/$', 'scoreboard.views.task_solve')
 
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
