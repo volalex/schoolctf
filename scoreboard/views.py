@@ -52,7 +52,6 @@ def logout_user(request):
     return HttpResponseRedirect("/")
 
 
-@login_required
 @never_cache
 def tasks(request):
     pivot = defaultdict(list)
@@ -64,7 +63,6 @@ def tasks(request):
     return TemplateResponse(request, "tasks_main.html", {"tasks": dict(pivot)})
 
 
-@login_required
 @never_cache
 def task_detail(request, task_pk):
     try:
