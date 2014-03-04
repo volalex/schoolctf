@@ -52,25 +52,21 @@ def logout_user(request):
     return HttpResponseRedirect("/")
 
 
-@login_required
 @never_cache
 def tasks(request):
     pivot = defaultdict(list)
-    team = request.user
     for result in Task.objects.values('category', 'score', 'is_enabled', 'pk').order_by('category', 'score'):
         pivot[Category.objects.get(pk=result['category'])].append(
             {"score": result["score"], "is_enabled": result["is_enabled"], "pk": result["pk"],
-             "is_solved": SolvedTasks.objects.filter(team=team, task=Task.objects.get(pk=result["pk"])).exists()})
+             "is_solved": False })
     return TemplateResponse(request, "tasks_main.html", {"tasks": dict(pivot)})
 
 
-@login_required
 @never_cache
 def task_detail(request, task_pk):
     try:
         task = Task.objects.get(pk=task_pk)
-        is_solved = SolvedTasks.objects.filter(task=task, team=request.user).exists()
-        return TemplateResponse(request, "tasks_detail.html", {"task": task, "is_solved": is_solved})
+        return TemplateResponse(request, "tasks_detail.html", {"task": task, "is_solved": False})
     except Task.DoesNotExist:
         return HttpResponseNotFound("Not found")
 
