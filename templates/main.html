@@ -27,6 +27,9 @@
                <li>
                   <a href="/rules/" class="navbar-link">Правила соревнований</a>
               </li>
+               <li>
+                  <a href="/sponsor/" class="navbar-link">Спонсор соревнований</a>
+              </li>
           </ul>
             {% if not user.is_authenticated %}
           <form class="navbar-form navbar-right" role="form" action="{% url 'scoreboard.views.login_user' %}" method="POST">
