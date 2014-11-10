@@ -12,10 +12,10 @@
             </tr>
         </thead>
         <tbody>
-        {% for team,score in results.items %}
+        {% for team_name, score in results %}
             <tr>
                 <td>
-                    {{ team.team_name }}
+                    {{ team_name }}
                 </td>
                 <td>
                     {{ score }}

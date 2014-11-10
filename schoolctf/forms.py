@@ -8,7 +8,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Team
-        fields = ('email', 'school', 'team_name')
+        fields = ('team_name',)
 
     def clean_password2(self):
         # Check that the two password entries match

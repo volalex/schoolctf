@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.http.response import HttpResponseNotFound, HttpResponse, HttpResponseRedirect
 
 
-#registration view
+# registration view
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.cache import never_cache
@@ -46,23 +46,25 @@ def login_user(request):
         messages.add_message(request, messages.ERROR, 'Пожалуйста войдите в систему')
         return redirect("scoreboard.views.index")
 
-
+@login_required
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
 
 
 @never_cache
+@login_required
 def tasks(request):
     pivot = defaultdict(list)
     for result in Task.objects.values('category', 'score', 'is_enabled', 'pk').order_by('category', 'score'):
         pivot[Category.objects.get(pk=result['category'])].append(
             {"score": result["score"], "is_enabled": result["is_enabled"], "pk": result["pk"],
-             "is_solved": False })
+             "is_solved": False})
     return TemplateResponse(request, "tasks_main.html", {"tasks": dict(pivot)})
 
 
 @never_cache
+@login_required
 def task_detail(request, task_pk):
     try:
         task = Task.objects.get(pk=task_pk)

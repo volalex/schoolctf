@@ -1,7 +1,8 @@
 from django import template
-from django.db import connection
 from django.db.models import Sum
+
 from scoreboard.models import News, SolvedTasks, Team
+
 
 __author__ = 'volal_000'
 
@@ -19,12 +20,8 @@ def news_block(news_pk):
 
 @register.inclusion_tag("includes/results.html")
 def results():
-    teams = Team.objects.all().filter(is_admin=False)
-    result_dict = {}
-    for team in teams:
-        solved_tasks = SolvedTasks.objects.all().filter(team=team)
-        score = 0
-        for solved_task in solved_tasks:
-            score += solved_task.task.score
-        result_dict[team] = score
-    return {"results": result_dict}
+    scoreboard = SolvedTasks.objects.extra(select={'team__team_name': 'team_name'}) \
+        .filter(team__is_admin=False).values("team__team_name").annotate(
+        sum=Sum('task__score')).order_by("-sum")
+    scoreboard = [(m['team__team_name'], m['sum']) for m in scoreboard]
+    return {"results": scoreboard}

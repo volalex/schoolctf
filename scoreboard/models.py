@@ -6,32 +6,20 @@ from django.dispatch import receiver
 
 
 class TeamUserManager(BaseUserManager):
-    def create_user(self, email, team_name, school, password=None):
-        """
-            Creates new team in with given email, team name,school and password
-        """
-        if not email:
-            raise ValueError("Team must have a email address")
+    def create_user(self, team_name, password=None):
 
         user = self.model(
-            email=self.normalize_email(email),
             team_name=team_name,
-            school=school
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, team_name, school, password):
-        """
-            Creates a new superuser with email team_name school and password
-        """
+    def create_superuser(self, team_name, password):
         user = self.create_user(
-            email,
             password=password,
-            team_name=team_name,
-            school=school
+            team_name=team_name
         )
         user.is_admin = True
         user.is_active = True
@@ -40,22 +28,15 @@ class TeamUserManager(BaseUserManager):
 
 
 class Team(AbstractBaseUser):
-    email = models.EmailField(
-        max_length=255,
-        unique=True,
-        verbose_name="Электронная почта"
-    )
     team_name = models.CharField(
         max_length=255,
         unique=True,
         verbose_name="Название команды"
     )
-    school = models.CharField(max_length=255, verbose_name="Название школы")
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     objects = TeamUserManager()
 
-    REQUIRED_FIELDS = ['school', 'email']
     USERNAME_FIELD = 'team_name'
 
     def get_full_name(self):
